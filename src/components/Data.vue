@@ -13,11 +13,6 @@
       :options.sync="options"
       class="elevation-1 blue-grey"
     ></v-data-table>
-
-    <v-btn v-on:click="btnClick()" elevation="2" color="error" text large
-      >test</v-btn
-    >
-    <h2>{{ h2 }}</h2>
   </div>
 </template>
 
@@ -26,7 +21,7 @@ export default {
   name: "Data",
   data: () => {
     return {
-      itemsData: [],
+      itemsData: null,
       date: new Date().toISOString().substr(0, 10),
       headers: [
         {
@@ -37,9 +32,7 @@ export default {
         },
         { text: "Amount", value: "value" },
       ],
-      loading: true,
       options: {},
-      h2: "test",
     };
   },
   computed: {
@@ -50,31 +43,19 @@ export default {
   watch: {
     getData() {
       this.itemsData = this.getData;
-      // console.log(this.itemsData);
     },
     options: {
       handler() {
         this.getDataFromApi(this.date);
       },
     },
-    // watch: {
-    //   data(items) {
-    //     this.itemsData = items;
-    //     console.log(this.itemsData);
-    //   },
-    //   options: {
-    //     handler() {
-    //       this.getDataFromApi();
-    //     },
-    //     deep: true,
-    //   },
-    //   btnData() {
-    //     this.btnClick;
-    //   },
+    itemsData() {
+      this.loading = false;
+    },
   },
   mounted() {
     this.getDataFromApi(this.date);
-    this.getData;
+    setTimeout(() => this.getData, 2000);
   },
   methods: {
     getDataFromApi(date) {
@@ -84,7 +65,6 @@ export default {
       console.log(`You have just double clicked the following date: ${date}`);
       this.itemsData = this.getDataFromApi(date);
       this.date = date;
-      // this.$store.dispatch("setDate", date);
     },
   },
 };
